@@ -2,98 +2,48 @@ import Image from "next/image";
 import { Metadata } from "next";
 import Head from "next/head";
 
-type Props = {
-  datos: {
-    titulo: string;
-    descripcion: string;
-    imagenOg: string;
-    url: string;
-  };
+type Datos = {
+  titulo: string;
+  descripcion: string;
+  imagenOg: string;
+  url: string;
 };
 
-export async function getServerSideProps() {
-  // Aquí puedes hacer fetch a APIs, DB, etc.
-  const datos = {
-    titulo: "Mi página SSR en Next.js",
-    descripcion: "Esta página se renderiza desde el servidor con metadatos.",
-    imagenOg:
-      "https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469", // Debe ser una URL absoluta
-    url: "https://tusitio.com/ejemplo",
-  };
-
+async function obtenerDatos(): Promise<Datos> {
   return {
-    props: { datos }, // Se pasa como props al componente
+    titulo: "SSR con App Router",
+    descripcion: "Esta página usa server rendering en el App Router.",
+    imagenOg:
+      "https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469",
+    url: "https://tusitio.com/ejemplo",
   };
 }
 
-// Generar metadata dinámicamente para cada artículo
-// export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
+  const datos = await obtenerDatos();
 
-//   // Obtener dimensiones de la imagen
+  return {
+    title: datos.titulo,
+    description: datos.descripcion,
+    openGraph: {
+      title: datos.titulo,
+      description: datos.descripcion,
+      images: [datos.imagenOg],
+      url: datos.url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: datos.titulo,
+      description: datos.descripcion,
+      images: [datos.imagenOg],
+    },
+  };
+}
 
-//   // Detectar el tipo MIME de la imagen dinámicamente
-
-//   // Generar múltiples variantes de la imagen
-//   //const imageVariants = generateImageVariants(article.image_url);
-
-//   // Crear objetos de imagen con dimensiones dinámicas y tipo MIME correcto
-//   const ogImages = [{
-//     'https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469',
-//     width: 1200,
-//     height: 740,
-//     alt: 'NextJS',
-//     type: 'image/png',
-//     secureUrl: 'https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469',
-//   }];
-
-//   return {
-//     title: ` - NExtJS Test`,
-//     description: 'NExtJS description',
-//     openGraph: {
-//       title: 'Title next',
-//       description: 'description NExt',
-//       siteName: 'Alternativa Socialista',
-//       images: ogImages,
-//       locale: 'es_CL',
-//       type: 'article',
-//     },
-//     robots: {
-//       index: true,
-//       follow: true,
-//       googleBot: {
-//         index: true,
-//         follow: true,
-//         'max-video-preview': -1,
-//         'max-image-preview': 'large',
-//         'max-snippet': -1,
-//       },
-//     },
-
-//     other: {
-//       // Metadatos adicionales para WhatsApp y otros bots con dimensiones dinámicas y tipo MIME correcto
-//       'og:image:secure_url': 'https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469',
-//       'og:image:width': 1200,
-//       'og:image:height': 740,
-//       'og:image:type': 'iage/png',
-//     },
-//   };
-// }
-
-export default function Home({ datos }: Props) {
+export default function Home() {
   return (
     <>
-      <Head>
-        <title>{datos.titulo}</title>
-        <meta name="description" content={datos.descripcion} />
-
-        {/* Open Graph para compartir en redes */}
-        <meta property="og:title" content={datos.titulo} />
-        <meta property="og:description" content={datos.descripcion} />
-        <meta property="og:image" content={datos.imagenOg} />
-        <meta property="og:url" content={datos.url} />
-        <meta property="og:type" content="website" />
-      </Head>
-
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
           <Image
