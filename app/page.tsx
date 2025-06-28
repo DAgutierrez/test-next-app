@@ -14,7 +14,7 @@ async function obtenerDatos(): Promise<Datos> {
     titulo: "SSR con App Router",
     descripcion: "Esta página usa server rendering en el App Router.",
     imagenOg:
-      "https://vlbdporkjtogegumkgnk.supabase.co/storage/v1/object/public/images/0.905759224396649.png?cache=false&t=1751067134469",
+      "https://imagenes.eleconomista.com.mx/files/image_768_768/uploads/2025/06/23/68591dc3c1b45.png",
     url: "https://tusitio.com/ejemplo",
   };
 }
